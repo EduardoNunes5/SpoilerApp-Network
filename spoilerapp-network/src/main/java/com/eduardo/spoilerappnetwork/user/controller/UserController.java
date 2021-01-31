@@ -23,4 +23,9 @@ public class UserController {
     public ResponseMessageDTO create(@RequestBody @Valid UserDTO userDTO) {
         return userService.create(userDTO);
     }
+
+    @PutMapping("/{id}")
+    public ResponseMessageDTO update(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
+        return userService.update(id, userDTO);
+    }
 }

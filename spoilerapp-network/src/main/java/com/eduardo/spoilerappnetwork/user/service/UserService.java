@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
 
     ResponseMessageDTO create(UserDTO userDTO);
-    ResponseMessageDTO update(UserDTO userDTO);
+    ResponseMessageDTO update(Long id, UserDTO userDTO);
     List<UserDTO> findAll();
 
 }

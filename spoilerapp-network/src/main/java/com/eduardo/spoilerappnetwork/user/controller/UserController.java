@@ -1,5 +1,8 @@
 package com.eduardo.spoilerappnetwork.user.controller;
 
+import com.eduardo.spoilerappnetwork.security.jwt.dto.JwtRequest;
+import com.eduardo.spoilerappnetwork.security.jwt.dto.JwtResponse;
+import com.eduardo.spoilerappnetwork.security.userdetails.UserDetailsServiceImpl;
 import com.eduardo.spoilerappnetwork.user.dto.ResponseMessageDTO;
 import com.eduardo.spoilerappnetwork.user.dto.UserDTO;
 import com.eduardo.spoilerappnetwork.user.service.UserService;
@@ -13,15 +16,23 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserDetailsServiceImpl userDetailsService) {
         this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseMessageDTO create(@RequestBody @Valid UserDTO userDTO) {
         return userService.create(userDTO);
+    }
+
+    @PostMapping("/authenticate")
+    public JwtResponse authenticate(@RequestBody JwtRequest userCredentials){
+        System.out.println(userCredentials);
+        return userDetailsService.authenticate(userCredentials);
     }
 
     @PutMapping("/{id}")

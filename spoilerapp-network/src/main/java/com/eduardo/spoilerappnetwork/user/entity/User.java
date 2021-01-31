@@ -28,7 +28,7 @@ public class User {
     private String name;
 
     @NotNull
-    @Column(unique = true)
+    @Column(unique = true, updatable = false)
     private String email;
 
     @NotNull

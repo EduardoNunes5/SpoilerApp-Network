@@ -1,7 +1,14 @@
 package com.eduardo.spoilerappnetwork.security.userdetails;
 
+import com.eduardo.spoilerappnetwork.security.jwt.dto.JwtRequest;
+import com.eduardo.spoilerappnetwork.security.jwt.dto.JwtResponse;
+import com.eduardo.spoilerappnetwork.security.jwt.service.JwtService;
 import com.eduardo.spoilerappnetwork.user.entity.User;
 import com.eduardo.spoilerappnetwork.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,10 +17,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Autowired
+    private JwtService jwtService;
+
+    @Lazy
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    public JwtResponse authenticate(JwtRequest userCredentials){
+        String username = userCredentials.getEmail();
+        String password = userCredentials.getPassword();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+        UserDetails userDetails = this.loadUserByUsername(userCredentials.getEmail());
+
+        String token = jwtService.generateToken(userDetails);
+
+        return new JwtResponse(token);
     }
 
     @Override
@@ -21,6 +44,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = this.userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
 
-        return new UserDetailsImpl(user.getEmail(), user.getPassword());
+        return new UserDetailsImpl(user.getName(), user.getPassword());
     }
 }

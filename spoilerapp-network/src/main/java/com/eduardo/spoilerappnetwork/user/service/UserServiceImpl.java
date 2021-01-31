@@ -7,6 +7,7 @@ import com.eduardo.spoilerappnetwork.user.exception.UserAlreadyExistsException;
 import com.eduardo.spoilerappnetwork.user.exception.UserNotFoundException;
 import com.eduardo.spoilerappnetwork.user.mapper.UserMapper;
 import com.eduardo.spoilerappnetwork.user.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +20,11 @@ public class UserServiceImpl implements  UserService{
 
     private final UserRepository userRepository;
     private  final UserMapper userMapper = UserMapper.INSTANCE;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,6 +32,7 @@ public class UserServiceImpl implements  UserService{
         verifyIfUserExists(userDTO.getEmail());
 
         User toBeSaved = userMapper.toModel(userDTO);
+        toBeSaved.setPassword(passwordEncoder.encode(toBeSaved.getPassword()));
         User saved = this.userRepository.save(toBeSaved);
 
         return creationMessage(saved.getId());
@@ -52,7 +56,7 @@ public class UserServiceImpl implements  UserService{
                 });
     }
 
-    private User verifyAndGetIfExists(Long id){
+    public User verifyAndGetIfExists(Long id){
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 

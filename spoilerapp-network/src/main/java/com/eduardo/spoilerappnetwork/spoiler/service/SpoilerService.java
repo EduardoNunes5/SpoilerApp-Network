@@ -2,13 +2,15 @@ package com.eduardo.spoilerappnetwork.spoiler.service;
 
 
 import com.eduardo.spoilerappnetwork.spoiler.dto.SpoilerDTO;
+import com.eduardo.spoilerappnetwork.spoiler.dto.SpoilerResponseDTO;
 
 import java.util.List;
 
 public interface SpoilerService {
 
-    SpoilerDTO create(SpoilerDTO userDTO);
-    SpoilerDTO update(Long id, SpoilerDTO userDTO);
+    SpoilerResponseDTO create(SpoilerDTO userDTO);
+    SpoilerResponseDTO update(Long id, SpoilerDTO userDTO);
     List<SpoilerDTO> findAll();
     void delete(Long id);
+
 }

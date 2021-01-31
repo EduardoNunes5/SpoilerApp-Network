@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Spoiler {
 
     @Id
@@ -31,7 +29,7 @@ public class Spoiler {
     @Lob
     private String description;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
 }

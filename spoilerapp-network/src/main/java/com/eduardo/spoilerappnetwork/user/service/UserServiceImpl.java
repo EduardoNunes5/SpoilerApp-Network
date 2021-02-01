@@ -41,10 +41,11 @@ public class UserServiceImpl implements  UserService{
 
     @Override
     public ResponseMessageDTO update(Long id, UserUpdateDTO userDTO) {
-        verifyAndGetIfExists(id);
+        User user = verifyAndGetIfExists(id);
 
         User updatedModel = userMapper.toModel(userDTO);
         updatedModel.setId(id);
+        updatedModel.setUsername(user.getUsername());
 
         User updated = this.userRepository.save(updatedModel);
         return updationMessage(updated.getId());
@@ -57,10 +58,15 @@ public class UserServiceImpl implements  UserService{
                 });
     }
 
-    public User verifyAndGetIfExists(Long id){
+    private User verifyAndGetIfExists(Long id){
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
+    }
+
+    public User verifyAndGetIfExists(String username){
+        return this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
     }
 
     @Override

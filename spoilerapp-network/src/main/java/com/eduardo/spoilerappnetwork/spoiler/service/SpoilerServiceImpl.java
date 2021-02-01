@@ -8,6 +8,7 @@ import com.eduardo.spoilerappnetwork.spoiler.mapper.SpoilerMapper;
 import com.eduardo.spoilerappnetwork.spoiler.repository.SpoilerRepository;
 import com.eduardo.spoilerappnetwork.user.entity.User;
 import com.eduardo.spoilerappnetwork.user.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +26,8 @@ public class SpoilerServiceImpl implements  SpoilerService{
     }
 
     @Override
-    public SpoilerResponseDTO create(SpoilerDTO spoilerDTO) {
-        User user = userService.verifyAndGetIfExists(spoilerDTO.getAuthorId());
+    public SpoilerResponseDTO create(UserDetails userDetails, SpoilerDTO spoilerDTO) {
+        User user = userService.verifyAndGetIfExists(userDetails.getUsername());
         Spoiler spoilerToBeSaved = spoilerMapper.toModel(spoilerDTO);
         spoilerToBeSaved.setAuthor(user);
 
@@ -35,8 +36,9 @@ public class SpoilerServiceImpl implements  SpoilerService{
     }
 
     @Override
-    public SpoilerResponseDTO update(Long id, SpoilerDTO spoilerDTO) {
-        Spoiler found = verifyAndGetIfExists(id);
+    public SpoilerResponseDTO update(UserDetails authUser, Long id, SpoilerDTO spoilerDTO) {
+        User foundUser = this.userService.verifyAndGetIfExists(authUser.getUsername());
+        Spoiler found = verifyAndGetIfExistsByIdAndUser(id, foundUser);
         Spoiler toUpdate = spoilerMapper.toModel(spoilerDTO);
 
         toUpdate.setAuthor(found.getAuthor());
@@ -46,10 +48,11 @@ public class SpoilerServiceImpl implements  SpoilerService{
         return spoilerMapper.toDTO(updated);
     }
 
-    private Spoiler verifyAndGetIfExists(Long id) {
-        return this.spoilerRepository.findById(id)
+    private Spoiler verifyAndGetIfExistsByIdAndUser(Long id, User foundUser) {
+        return this.spoilerRepository.findByIdAndAuthor(id, foundUser)
                 .orElseThrow(() -> new SpoilerNotFoundException(id));
     }
+
 
     @Override
     public List<SpoilerDTO> findAll() {

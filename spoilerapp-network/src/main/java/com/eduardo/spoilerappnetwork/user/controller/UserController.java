@@ -32,7 +32,6 @@ public class UserController {
 
     @PostMapping("/authenticate")
     public JwtResponse authenticate(@RequestBody JwtRequest userCredentials){
-        System.out.println(userCredentials);
         return userDetailsService.authenticate(userCredentials);
     }
 

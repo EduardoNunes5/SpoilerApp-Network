@@ -12,6 +12,6 @@ public interface UserService {
     ResponseMessageDTO create(UserDTO userDTO);
     ResponseMessageDTO update(Long id, UserUpdateDTO userDTO);
     List<UserDTO> findAll();
-    User verifyAndGetIfExists(Long id);
+    User verifyAndGetIfExists(String username);
 
 }

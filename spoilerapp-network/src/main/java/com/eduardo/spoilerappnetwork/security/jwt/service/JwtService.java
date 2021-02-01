@@ -37,8 +37,16 @@ public class JwtService {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    public Date getValidationFromToken(String token){
+    public Date getExpiration(String token){
         return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails){
+        return isNotExpired(token) && getUsernameFromToken(token).equals(userDetails.getUsername());
+    }
+
+    private boolean isNotExpired(String token){
+        return getExpiration(token).after(new Date());
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims,T> resolver){
@@ -48,6 +56,7 @@ public class JwtService {
 
     private Claims getBodyFromToken(String token){
         return Jwts.parser()
+                .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
     }

@@ -9,20 +9,16 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class UserDTO {
+public class UserUpdateDTO {
 
     private Long id;
 
     @NotNull
     @NotEmpty
     private String name;
-
-    @NotNull
-    @NotEmpty
-    private String username;
 
     @NotNull
     @Email

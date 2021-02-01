@@ -30,9 +30,6 @@ public class SpoilerServiceImpl implements  SpoilerService{
         Spoiler spoilerToBeSaved = spoilerMapper.toModel(spoilerDTO);
         spoilerToBeSaved.setAuthor(user);
 
-        System.out.println(spoilerToBeSaved);
-        System.out.println(spoilerDTO);
-
         Spoiler saved = this.spoilerRepository.save(spoilerToBeSaved);
         return spoilerMapper.toDTO(saved);
     }

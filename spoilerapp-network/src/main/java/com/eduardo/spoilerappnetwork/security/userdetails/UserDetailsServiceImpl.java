@@ -28,11 +28,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private AuthenticationManager authenticationManager;
 
     public JwtResponse authenticate(JwtRequest userCredentials){
-        String username = userCredentials.getEmail();
+        String username = userCredentials.getUsername();
         String password = userCredentials.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-        UserDetails userDetails = this.loadUserByUsername(userCredentials.getEmail());
+        UserDetails userDetails = this.loadUserByUsername(userCredentials.getUsername());
 
         String token = jwtService.generateToken(userDetails);
 
@@ -41,9 +41,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = this.userRepository.findByEmail(email)
+        User user = this.userRepository.findByUsername(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
 
-        return new UserDetailsImpl(user.getName(), user.getPassword());
+        return new UserDetailsImpl(user.getUsername(), user.getPassword());
     }
 }

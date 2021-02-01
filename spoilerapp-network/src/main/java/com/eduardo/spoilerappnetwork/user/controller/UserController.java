@@ -5,6 +5,7 @@ import com.eduardo.spoilerappnetwork.security.jwt.dto.JwtResponse;
 import com.eduardo.spoilerappnetwork.security.userdetails.UserDetailsServiceImpl;
 import com.eduardo.spoilerappnetwork.user.dto.ResponseMessageDTO;
 import com.eduardo.spoilerappnetwork.user.dto.UserDTO;
+import com.eduardo.spoilerappnetwork.user.dto.UserUpdateDTO;
 import com.eduardo.spoilerappnetwork.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseMessageDTO update(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
+    public ResponseMessageDTO update(@PathVariable Long id, @RequestBody @Valid UserUpdateDTO userDTO) {
         return userService.update(id, userDTO);
     }
 }

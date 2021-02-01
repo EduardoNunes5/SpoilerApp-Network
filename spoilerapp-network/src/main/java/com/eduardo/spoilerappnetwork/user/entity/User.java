@@ -28,7 +28,12 @@ public class User {
     private String name;
 
     @NotNull
+    @NotEmpty
     @Column(unique = true, updatable = false)
+    private String username;
+
+    @NotNull
+    @Column(unique = true)
     private String email;
 
     @NotNull

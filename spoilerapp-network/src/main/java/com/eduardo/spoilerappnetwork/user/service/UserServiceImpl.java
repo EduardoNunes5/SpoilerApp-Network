@@ -2,6 +2,7 @@ package com.eduardo.spoilerappnetwork.user.service;
 
 import com.eduardo.spoilerappnetwork.user.dto.ResponseMessageDTO;
 import com.eduardo.spoilerappnetwork.user.dto.UserDTO;
+import com.eduardo.spoilerappnetwork.user.dto.UserUpdateDTO;
 import com.eduardo.spoilerappnetwork.user.entity.User;
 import com.eduardo.spoilerappnetwork.user.exception.UserAlreadyExistsException;
 import com.eduardo.spoilerappnetwork.user.exception.UserNotFoundException;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements  UserService{
     }
 
     @Override
-    public ResponseMessageDTO update(Long id, UserDTO userDTO) {
+    public ResponseMessageDTO update(Long id, UserUpdateDTO userDTO) {
         verifyAndGetIfExists(id);
 
         User updatedModel = userMapper.toModel(userDTO);
@@ -49,10 +50,10 @@ public class UserServiceImpl implements  UserService{
         return updationMessage(updated.getId());
     }
 
-    private void verifyIfUserExists(String email) {
-        this.userRepository.findByEmail(email)
+    private void verifyIfUserExists(String username) {
+        this.userRepository.findByUsername(username)
                 .ifPresent( u -> {
-                    throw new UserAlreadyExistsException(email);
+                    throw new UserAlreadyExistsException(username);
                 });
     }
 

@@ -1,8 +1,8 @@
 package com.eduardo.spoilerappnetwork.security.config;
 
+import com.eduardo.spoilerappnetwork.security.jwt.filter.JwtEntryPoint;
 import com.eduardo.spoilerappnetwork.security.jwt.filter.JwtRequestFilter;
 import com.eduardo.spoilerappnetwork.security.userdetails.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,16 +23,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String SPOILER_URL = "/api/spoilers";
+    private static final String SPOILER_URL = "/api/spoilers/**";
     private static final String USER_URL = "/api/users/**";
     private static final String H2_URL = "/h2/**";
 
     private UserDetailsService userDetailsService;
     private JwtRequestFilter jwtRequestFilter;
+    private JwtEntryPoint jwtEntryPoint;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtRequestFilter jwtRequestFilter, JwtEntryPoint jwtEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.jwtEntryPoint = jwtEntryPoint;
     }
 
 
@@ -41,7 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, USER_URL).permitAll()
+                .antMatchers(HttpMethod.GET, SPOILER_URL).permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

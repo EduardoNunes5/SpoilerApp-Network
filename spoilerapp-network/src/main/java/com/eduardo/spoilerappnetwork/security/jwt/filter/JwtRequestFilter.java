@@ -2,6 +2,7 @@ package com.eduardo.spoilerappnetwork.security.jwt.filter;
 
 import com.eduardo.spoilerappnetwork.security.jwt.service.JwtService;
 import com.eduardo.spoilerappnetwork.security.userdetails.UserDetailsServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,14 +30,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String header = request.getHeader("Authorization");
         String token = "";
         String username = "";
 
         if(header != null && header.startsWith("Bearer ")){
             token = header.substring(7);
-            username = jwtService.getUsernameFromToken(token);
+            username = getUserFromToken(token, response);
         }
 
         if(isNotInContext(username)){
@@ -53,6 +53,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             usernamePassToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(usernamePassToken);
         }
+    }
+
+    private String getUserFromToken(String token, HttpServletResponse response) throws IOException {
+        try {
+            return jwtService.getUsernameFromToken(token);
+        }
+        catch(ExpiredJwtException e){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "expired token");
+        }
+        return "";
     }
 
     private boolean isNotInContext(String username) {

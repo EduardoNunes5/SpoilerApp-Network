@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SpoilerServiceImpl implements  SpoilerService{
@@ -55,8 +56,11 @@ public class SpoilerServiceImpl implements  SpoilerService{
 
 
     @Override
-    public List<SpoilerDTO> findAll() {
-        return null;
+    public List<SpoilerResponseDTO> findAll() {
+        return this.spoilerRepository.findAll()
+                .stream()
+                .map(spoilerMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

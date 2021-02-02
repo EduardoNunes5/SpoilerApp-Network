@@ -27,6 +27,11 @@ public class SpoilerController {
         return spoilerService.create(authUser, userDTO);
     }
 
+    @GetMapping
+    public List<SpoilerResponseDTO> findAll() {
+        return spoilerService.findAll();
+    }
+
     @PutMapping("/{id}")
     public SpoilerResponseDTO update(@AuthenticationPrincipal UserDetails authUser, @PathVariable Long id, @RequestBody @Valid SpoilerDTO userDTO) {
         return spoilerService.update(authUser, id, userDTO);

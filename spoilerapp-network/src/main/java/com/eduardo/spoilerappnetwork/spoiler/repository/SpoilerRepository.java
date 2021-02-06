@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface SpoilerRepository extends JpaRepository<Spoiler, Long> {
 
     Optional<Spoiler> findByIdAndAuthor(Long id, User author);
+    void deleteByIdAndAuthor(Long id, User author);
 }

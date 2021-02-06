@@ -37,8 +37,14 @@ public class SpoilerController {
         return spoilerService.findById(spoilerId);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public SpoilerResponseDTO update(@AuthenticationPrincipal UserDetails authUser, @PathVariable Long id, @RequestBody @Valid SpoilerDTO userDTO) {
         return spoilerService.update(authUser, id, userDTO);
+    }
+
+    @DeleteMapping("/{spoilerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spoilerId) {
+        spoilerService.delete(userDetails, spoilerId);
     }
 }

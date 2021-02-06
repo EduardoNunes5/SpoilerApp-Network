@@ -10,6 +10,7 @@ import com.eduardo.spoilerappnetwork.user.entity.User;
 import com.eduardo.spoilerappnetwork.user.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,11 +56,6 @@ public class SpoilerServiceImpl implements  SpoilerService{
         return spoilerMapper.toDTO(spoiler);
     }
 
-    private Spoiler verifyAndGetIfExistsByIdAndUser(Long id, User foundUser) {
-        return this.spoilerRepository.findByIdAndAuthor(id, foundUser)
-                .orElseThrow(() -> new SpoilerNotFoundException(id));
-    }
-
     @Override
     public Spoiler verifyAndGetIfExists(Long id){
         return this.spoilerRepository.findById(id)
@@ -76,7 +72,16 @@ public class SpoilerServiceImpl implements  SpoilerService{
     }
 
     @Override
-    public void delete(Long id) {
+    @Transactional
+    public void delete(UserDetails userDetails, Long id) {
+        User foundUser = this.userService.verifyAndGetIfExists(userDetails.getUsername());
+        Spoiler spoiler = this.verifyAndGetIfExistsByIdAndUser(id, foundUser);
+        this.spoilerRepository.deleteByIdAndAuthor(spoiler.getId(), foundUser);
 
+    }
+
+    private Spoiler verifyAndGetIfExistsByIdAndUser(Long id, User foundUser) {
+        return this.spoilerRepository.findByIdAndAuthor(id, foundUser)
+                .orElseThrow(() -> new SpoilerNotFoundException(id));
     }
 }

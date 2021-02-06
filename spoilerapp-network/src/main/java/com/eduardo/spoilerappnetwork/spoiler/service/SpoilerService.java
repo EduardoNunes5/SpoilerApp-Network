@@ -15,6 +15,7 @@ public interface SpoilerService {
     SpoilerResponseDTO findById(Long id);
     Spoiler verifyAndGetIfExists(Long id);
     List<SpoilerResponseDTO> findAll();
+    List<SpoilerResponseDTO> findByNameContaining(String name);
     void delete(UserDetails userDetails, Long id);
 
 }

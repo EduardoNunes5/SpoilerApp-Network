@@ -47,4 +47,9 @@ public class SpoilerController {
     public void delete(@AuthenticationPrincipal UserDetails authUser, @PathVariable Long spoilerId) {
         spoilerService.delete(authUser, spoilerId);
     }
+
+    @GetMapping(params = "name")
+    public List<SpoilerResponseDTO> findByNameContaining(@RequestParam(value = "name") String name) {
+        return spoilerService.findByNameContaining(name);
+    }
 }

@@ -80,6 +80,14 @@ public class SpoilerServiceImpl implements  SpoilerService{
 
     }
 
+    @Override
+    public List<SpoilerResponseDTO> findByNameContaining(String name) {
+        return this.spoilerRepository.findAllByNameContaining(name)
+                .stream()
+                .map(spoilerMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     private Spoiler verifyAndGetIfExistsByIdAndUser(Long id, User foundUser) {
         return this.spoilerRepository.findByIdAndAuthor(id, foundUser)
                 .orElseThrow(() -> new SpoilerNotFoundException(id));

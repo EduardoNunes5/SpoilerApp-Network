@@ -25,11 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String SPOILER_URL = "/api/spoilers/**";
     private static final String USER_URL = "/api/users/**";
+    private static final String COMMENT_URL = "/api/comments/**";
     private static final String H2_URL = "/h2/**";
 
-    private UserDetailsService userDetailsService;
-    private JwtRequestFilter jwtRequestFilter;
-    private JwtEntryPoint jwtEntryPoint;
+    private final UserDetailsService userDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final JwtEntryPoint jwtEntryPoint;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtRequestFilter jwtRequestFilter, JwtEntryPoint jwtEntryPoint) {
         this.userDetailsService = userDetailsService;
@@ -43,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, USER_URL).permitAll()
-                .antMatchers(HttpMethod.GET, SPOILER_URL).permitAll()
+                .antMatchers(HttpMethod.GET, SPOILER_URL, COMMENT_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
@@ -66,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers(H2_URL, "/api/users");
     }

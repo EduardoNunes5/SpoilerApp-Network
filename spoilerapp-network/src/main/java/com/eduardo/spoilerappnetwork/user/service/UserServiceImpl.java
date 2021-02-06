@@ -52,7 +52,7 @@ public class UserServiceImpl implements  UserService{
     }
 
     private void verifyIfUserExists(String username, String email) {
-        this.userRepository.findByUsernameAndEmail(username, email)
+        this.userRepository.findByUsernameOrEmail(username, email)
                 .ifPresent( u -> {
                     throw new UserAlreadyExistsException(username);
                 });

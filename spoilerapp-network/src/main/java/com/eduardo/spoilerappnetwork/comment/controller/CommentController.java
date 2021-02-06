@@ -28,4 +28,10 @@ public class CommentController {
     public CommentResponseDTO update(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
         return commentService.update(userDetails, commentId, commentDTO);
     }
+
+    @DeleteMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(UserDetails userDetails, @PathVariable Long commentId) {
+        commentService.delete(userDetails, commentId);
+    }
 }

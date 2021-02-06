@@ -8,4 +8,5 @@ public interface CommentService {
 
     CommentResponseDTO create(UserDetails userDetails, CommentDTO commentDTO);
     CommentResponseDTO update(UserDetails userDetails,Long id, CommentDTO commentDTO);
+    void delete(UserDetails userDetails, Long id);
 }

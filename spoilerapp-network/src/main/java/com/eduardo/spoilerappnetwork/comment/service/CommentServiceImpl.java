@@ -61,6 +61,13 @@ public class CommentServiceImpl implements CommentService{
         return commentMapper.toDTO(updated);
     }
 
+    @Override
+    public void delete(UserDetails userDetails, Long id) {
+        User authUser = this.userService.verifyAndGetIfExists(userDetails.getUsername());
+        Comment foundComment = verifyIfExistsByIdAndUserAndGet(id, authUser);
+        this.commentRepository.deleteByIdAndAuthor(foundComment.getId(), authUser);
+    }
+
     private Comment verifyIfExistsByIdAndUserAndGet(Long commentId, User authUser) {
         return this.commentRepository.findByIdAndAuthor(commentId, authUser)
                 .orElseThrow(() -> new CommentNotFoundException(commentId));

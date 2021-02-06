@@ -13,6 +13,7 @@ import com.eduardo.spoilerappnetwork.user.entity.User;
 import com.eduardo.spoilerappnetwork.user.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -62,6 +63,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void delete(UserDetails userDetails, Long id) {
         User authUser = this.userService.verifyAndGetIfExists(userDetails.getUsername());
         Comment foundComment = verifyIfExistsByIdAndUserAndGet(id, authUser);

@@ -12,6 +12,7 @@ public interface SpoilerService {
 
     SpoilerResponseDTO create(UserDetails userDetails, SpoilerDTO userDTO);
     SpoilerResponseDTO update(UserDetails userDetails, Long id, SpoilerDTO userDTO);
+    SpoilerResponseDTO findById(Long id);
     Spoiler verifyAndGetIfExists(Long id);
     List<SpoilerResponseDTO> findAll();
     void delete(Long id);

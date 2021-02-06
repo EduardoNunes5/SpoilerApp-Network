@@ -32,6 +32,11 @@ public class SpoilerController {
         return spoilerService.findAll();
     }
 
+    @GetMapping("/{spoilerId}")
+    public SpoilerResponseDTO findById(@PathVariable Long spoilerId){
+        return spoilerService.findById(spoilerId);
+    }
+
     @PutMapping("/{id}")
     public SpoilerResponseDTO update(@AuthenticationPrincipal UserDetails authUser, @PathVariable Long id, @RequestBody @Valid SpoilerDTO userDTO) {
         return spoilerService.update(authUser, id, userDTO);

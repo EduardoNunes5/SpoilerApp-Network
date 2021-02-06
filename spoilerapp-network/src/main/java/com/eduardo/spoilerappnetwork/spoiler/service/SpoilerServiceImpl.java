@@ -49,6 +49,12 @@ public class SpoilerServiceImpl implements  SpoilerService{
         return spoilerMapper.toDTO(updated);
     }
 
+    @Override
+    public SpoilerResponseDTO findById(Long id) {
+        Spoiler spoiler = verifyAndGetIfExists(id);
+        return spoilerMapper.toDTO(spoiler);
+    }
+
     private Spoiler verifyAndGetIfExistsByIdAndUser(Long id, User foundUser) {
         return this.spoilerRepository.findByIdAndAuthor(id, foundUser)
                 .orElseThrow(() -> new SpoilerNotFoundException(id));

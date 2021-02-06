@@ -54,6 +54,12 @@ public class SpoilerServiceImpl implements  SpoilerService{
                 .orElseThrow(() -> new SpoilerNotFoundException(id));
     }
 
+    @Override
+    public Spoiler verifyAndGetIfExists(Long id){
+        return this.spoilerRepository.findById(id)
+                .orElseThrow(() -> new SpoilerNotFoundException(id));
+    }
+
 
     @Override
     public List<SpoilerResponseDTO> findAll() {

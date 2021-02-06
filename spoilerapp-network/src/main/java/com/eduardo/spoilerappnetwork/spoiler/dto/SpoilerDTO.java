@@ -22,6 +22,8 @@ public class SpoilerDTO {
     @NotNull
     private Integer episode;
 
+    @NotNull
+    @NotEmpty
     private String description;
 
     @NotNull

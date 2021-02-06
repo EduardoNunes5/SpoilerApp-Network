@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService{
@@ -68,6 +70,14 @@ public class CommentServiceImpl implements CommentService{
         User authUser = this.userService.verifyAndGetIfExists(userDetails.getUsername());
         Comment foundComment = verifyIfExistsByIdAndUserAndGet(id, authUser);
         this.commentRepository.deleteByIdAndAuthor(foundComment.getId(), authUser);
+    }
+
+    @Override
+    public List<CommentResponseDTO> findBySpoilerId(Long spoilerId) {
+        return this.commentRepository.findAllBySpoilerId(spoilerId)
+                .stream()
+                .map(commentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     private Comment verifyIfExistsByIdAndUserAndGet(Long commentId, User authUser) {

@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
@@ -33,5 +35,10 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long commentId) {
         commentService.delete(userDetails, commentId);
+    }
+
+    @GetMapping("/spoilers/{spoilerId}")
+    public List<CommentResponseDTO> findBySpoilerId(@PathVariable Long spoilerId) {
+        return commentService.findBySpoilerId(spoilerId);
     }
 }

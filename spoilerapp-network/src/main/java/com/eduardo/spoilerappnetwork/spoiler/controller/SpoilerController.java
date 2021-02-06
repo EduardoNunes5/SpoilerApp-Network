@@ -44,7 +44,7 @@ public class SpoilerController {
 
     @DeleteMapping("/{spoilerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spoilerId) {
-        spoilerService.delete(userDetails, spoilerId);
+    public void delete(@AuthenticationPrincipal UserDetails authUser, @PathVariable Long spoilerId) {
+        spoilerService.delete(authUser, spoilerId);
     }
 }

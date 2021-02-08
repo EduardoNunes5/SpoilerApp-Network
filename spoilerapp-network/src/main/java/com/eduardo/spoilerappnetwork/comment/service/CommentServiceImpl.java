@@ -2,11 +2,11 @@ package com.eduardo.spoilerappnetwork.comment.service;
 
 import com.eduardo.spoilerappnetwork.comment.dto.CommentDTO;
 import com.eduardo.spoilerappnetwork.comment.dto.CommentResponseDTO;
+import com.eduardo.spoilerappnetwork.comment.dto.ReplyDTO;
 import com.eduardo.spoilerappnetwork.comment.entity.Comment;
 import com.eduardo.spoilerappnetwork.comment.exception.CommentNotFoundException;
 import com.eduardo.spoilerappnetwork.comment.mapper.CommentMapper;
 import com.eduardo.spoilerappnetwork.comment.repository.CommentRepository;
-import com.eduardo.spoilerappnetwork.spoiler.dto.SpoilerResponseDTO;
 import com.eduardo.spoilerappnetwork.spoiler.entity.Spoiler;
 import com.eduardo.spoilerappnetwork.spoiler.service.SpoilerService;
 import com.eduardo.spoilerappnetwork.user.entity.User;
@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService{
         toBeSaved.setCreationDate(LocalDateTime.now());
 
         Comment savedComment = this.commentRepository.save(toBeSaved);
-        return commentMapper.toDTO(savedComment);
+        return commentMapper.commentToCommentResponseDTO(savedComment);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class CommentServiceImpl implements CommentService{
         updatedComment.setSpoiler(foundSpoiler);
 
         Comment updated = this.commentRepository.save(updatedComment);
-        return commentMapper.toDTO(updated);
+        return commentMapper.commentToCommentResponseDTO(updated);
     }
 
     @Override
@@ -76,8 +76,25 @@ public class CommentServiceImpl implements CommentService{
     public List<CommentResponseDTO> findBySpoilerId(Long spoilerId) {
         return this.commentRepository.findAllBySpoilerId(spoilerId)
                 .stream()
-                .map(commentMapper::toDTO)
+                .map(commentMapper::commentToCommentResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentResponseDTO createReply(UserDetails userDetails, ReplyDTO replyDTO){
+        User authUser = this.userService.verifyAndGetIfExists(userDetails.getUsername());
+        Spoiler foundSpoiler = this.spoilerService.verifyAndGetIfExists(replyDTO.getSpoilerId());
+        Comment foundComment = verifyAndGetIfExists(replyDTO.getCommentId());
+
+        Comment newReply = commentMapper.toModel(replyDTO);
+        newReply.setAuthor(authUser);
+        newReply.setSpoiler(foundSpoiler);
+        newReply.setCreationDate(LocalDateTime.now());
+
+        foundComment.addReply(newReply);
+
+        Comment savedReply = this.commentRepository.save(newReply);
+        return commentMapper.commentToCommentResponseDTO(savedReply);
     }
 
     private Comment verifyIfExistsByIdAndUserAndGet(Long commentId, User authUser) {

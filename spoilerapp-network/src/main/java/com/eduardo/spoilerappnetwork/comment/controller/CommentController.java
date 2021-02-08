@@ -2,6 +2,7 @@ package com.eduardo.spoilerappnetwork.comment.controller;
 
 import com.eduardo.spoilerappnetwork.comment.dto.CommentDTO;
 import com.eduardo.spoilerappnetwork.comment.dto.CommentResponseDTO;
+import com.eduardo.spoilerappnetwork.comment.dto.ReplyDTO;
 import com.eduardo.spoilerappnetwork.comment.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,12 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponseDTO create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CommentDTO commentDTO) {
         return commentService.create(userDetails, commentDTO);
+    }
+
+    @PostMapping("/replies")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentResponseDTO createReply(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReplyDTO replyDTO){
+        return this.commentService.createReply(userDetails, replyDTO);
     }
 
     @PutMapping("/{commentId}")

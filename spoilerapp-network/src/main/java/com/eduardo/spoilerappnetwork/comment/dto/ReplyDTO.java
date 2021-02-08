@@ -6,13 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDTO {
-
+public class ReplyDTO {
     private Long id;
 
     @NotEmpty
@@ -24,4 +22,6 @@ public class CommentDTO {
 
     @NotNull
     private Long authorId;
+
+    private Long commentId;
 }

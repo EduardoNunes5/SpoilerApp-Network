@@ -11,7 +11,7 @@ public class CommentResponseDTO {
 
     private Long id;
 
-    private String comment;
+    private String commentText;
 
     private UserResponseDTO author;
 

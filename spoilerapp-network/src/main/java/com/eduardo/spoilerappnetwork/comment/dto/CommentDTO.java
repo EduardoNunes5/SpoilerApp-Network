@@ -1,12 +1,12 @@
 package com.eduardo.spoilerappnetwork.comment.dto;
 
+import com.eduardo.spoilerappnetwork.comment.annotations.CannotBeRepliedIfReply;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor

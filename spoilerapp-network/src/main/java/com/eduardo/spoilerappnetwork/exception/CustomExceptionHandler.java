@@ -1,5 +1,6 @@
 package com.eduardo.spoilerappnetwork.exception;
 
+import com.eduardo.spoilerappnetwork.comment.exception.CommentIsReplyException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<Object> handleEntityExists(EntityExistsException e){
         return buildErrorMessage(HttpStatus.BAD_REQUEST ,e.getMessage(), Collections.singletonList(e.getMessage()));
+    }
+
+    @ExceptionHandler(CommentIsReplyException.class)
+    public ResponseEntity<Object> commentIsReply(RuntimeException r){
+        return buildErrorMessage(HttpStatus.BAD_REQUEST, r.getMessage(), Collections.singletonList(r.getMessage()));
     }
 
     @Override

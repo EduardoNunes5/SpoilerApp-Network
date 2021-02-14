@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,7 @@ public class SpoilerServiceImpl implements  SpoilerService{
         User user = userService.verifyAndGetIfExists(userDetails.getUsername());
         Spoiler spoilerToBeSaved = spoilerMapper.toModel(spoilerDTO);
         spoilerToBeSaved.setAuthor(user);
+        spoilerToBeSaved.setCreationDate(LocalDateTime.now());
 
         Spoiler saved = this.spoilerRepository.save(spoilerToBeSaved);
         return spoilerMapper.toDTO(saved);
@@ -45,6 +47,7 @@ public class SpoilerServiceImpl implements  SpoilerService{
 
         toUpdate.setAuthor(found.getAuthor());
         toUpdate.setId(found.getId());
+        toUpdate.setCreationDate(found.getCreationDate());
 
         Spoiler updated = this.spoilerRepository.save(toUpdate);
         return spoilerMapper.toDTO(updated);

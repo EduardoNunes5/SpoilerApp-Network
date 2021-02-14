@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,24 +24,30 @@ public class CommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentResponseDTO create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CommentDTO commentDTO) {
+    public CommentResponseDTO create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid CommentDTO commentDTO) {
         return commentService.create(userDetails, commentDTO);
     }
 
-    @PostMapping("/replies")
+    @PostMapping("/{parentCommentId}/replies")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentResponseDTO createReply(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReplyDTO replyDTO){
-        return this.commentService.createReply(userDetails, replyDTO);
+    public CommentResponseDTO createReply(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long parentCommentId, @RequestBody @Valid ReplyDTO replyDTO) {
+        return commentService.createReply(userDetails, parentCommentId, replyDTO);
     }
 
     @PutMapping("/{commentId}")
-    public CommentResponseDTO update(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
+    public CommentResponseDTO update(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long commentId, @RequestBody @Valid CommentDTO commentDTO) {
         return commentService.update(userDetails, commentId, commentDTO);
     }
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long commentId) {
+        commentService.delete(userDetails, commentId);
+    }
+
+    @DeleteMapping("/{commentId}/replies")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteReply(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long commentId){
         commentService.delete(userDetails, commentId);
     }
 

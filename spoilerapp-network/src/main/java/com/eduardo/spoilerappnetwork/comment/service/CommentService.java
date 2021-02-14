@@ -10,8 +10,8 @@ import java.util.List;
 public interface CommentService {
 
     CommentResponseDTO create(UserDetails userDetails, CommentDTO commentDTO);
+    CommentResponseDTO createReply(UserDetails userDetails, Long parentCommentId, ReplyDTO replyDTO);
     CommentResponseDTO update(UserDetails userDetails,Long id, CommentDTO commentDTO);
-    CommentResponseDTO createReply(UserDetails userDetails, ReplyDTO replyDTO);
-    List<CommentResponseDTO> findBySpoilerId(Long spoilerId);
     void delete(UserDetails userDetails, Long id);
+    List<CommentResponseDTO> findBySpoilerId(Long spoilerId);
 }

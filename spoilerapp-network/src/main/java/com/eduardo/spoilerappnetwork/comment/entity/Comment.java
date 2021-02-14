@@ -1,5 +1,6 @@
 package com.eduardo.spoilerappnetwork.comment.entity;
 
+import com.eduardo.spoilerappnetwork.comment.annotations.CannotBeRepliedIfReply;
 import com.eduardo.spoilerappnetwork.spoiler.entity.Spoiler;
 import com.eduardo.spoilerappnetwork.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -38,8 +39,10 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User author;
 
-    @OneToMany
-    @JoinColumn(name = "parent_comment_id")
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Comment> replies;
 
     public void addReply(Comment comment){

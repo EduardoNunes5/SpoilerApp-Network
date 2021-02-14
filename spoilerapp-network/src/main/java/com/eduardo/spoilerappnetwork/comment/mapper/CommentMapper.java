@@ -5,7 +5,6 @@ import com.eduardo.spoilerappnetwork.comment.dto.CommentResponseDTO;
 import com.eduardo.spoilerappnetwork.comment.dto.ReplyDTO;
 import com.eduardo.spoilerappnetwork.comment.entity.Comment;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -13,9 +12,8 @@ public interface CommentMapper {
 
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    CommentResponseDTO commentToCommentResponseDTO(Comment comment);
-
+    CommentResponseDTO toDTO(Comment comment);
     Comment toModel(CommentDTO commentDTO);
-
     Comment toModel(ReplyDTO replyDTO);
+
 }

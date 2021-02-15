@@ -13,7 +13,9 @@ public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
     CommentResponseDTO toDTO(Comment comment);
+
     Comment toModel(CommentDTO commentDTO);
+
     Comment toModel(ReplyDTO replyDTO);
 
 }

@@ -12,5 +12,6 @@ public interface SpoilerMapper {
     SpoilerMapper INSTANCE = Mappers.getMapper(SpoilerMapper.class);
 
     Spoiler toModel(SpoilerDTO spoilerDTO);
+
     SpoilerResponseDTO toDTO(Spoiler spoiler);
 }

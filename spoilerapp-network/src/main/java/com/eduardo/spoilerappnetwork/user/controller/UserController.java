@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UserController implements UserControllerDocs{
 
     private final UserService userService;
     private final UserDetailsServiceImpl userDetailsService;
@@ -35,7 +35,7 @@ public class UserController {
         return userDetailsService.authenticate(userCredentials);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseMessageDTO update(@PathVariable Long id, @RequestBody @Valid UserUpdateDTO userDTO) {
         return userService.update(id, userDTO);
     }

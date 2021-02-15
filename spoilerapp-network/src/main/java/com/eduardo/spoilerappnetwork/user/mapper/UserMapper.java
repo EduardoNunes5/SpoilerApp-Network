@@ -13,6 +13,8 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     User toModel(UserDTO userDTO);
+
     User toModel(UserUpdateDTO userUpdateDTO);
+
     UserResponseDTO toDTO(User model);
 }

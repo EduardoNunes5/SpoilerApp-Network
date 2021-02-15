@@ -27,6 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String USER_URL = "/api/users/**";
     private static final String COMMENT_URL = "/api/comments/**";
     private static final String H2_URL = "/h2/**";
+    private static final String[] SWAGGER_RESOURCES = {
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
 
     private final UserDetailsService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
@@ -69,7 +75,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers(H2_URL, "/api/users");
+                .antMatchers(H2_URL, "/api/users")
+                .antMatchers(SWAGGER_RESOURCES);
     }
 
     @Bean
